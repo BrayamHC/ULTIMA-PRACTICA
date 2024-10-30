@@ -20,6 +20,7 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Configurar el archivo default de Apache para que la ruta apunte a /var/www/html/public
 COPY /apache/000-default.conf /etc/apache2/sites-available/000-default.conf
+COPY /apache/php.ini /usr/local/etc/php/php.ini
 
 # Habilitar mod_rewrite de Apache (requerido por Laravel)
 RUN a2enmod rewrite

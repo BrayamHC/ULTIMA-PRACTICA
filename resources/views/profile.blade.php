@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
         body {
-            display: flex;
+            display: flex;  
             justify-content: center;
             align-items: center;
             height: 100vh; /* Altura completa de la ventana */

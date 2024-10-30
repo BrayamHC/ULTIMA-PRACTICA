@@ -4,39 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Usuarios</title>
+    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
-       body {
+        body {
             display: flex;
             justify-content: center;
-            align-items: center;
-            height: 100vh; /* Altura completa de la ventana */
+            align-items: flex-start;
+            flex-wrap: wrap;
+            height: auto;
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, red, blue, white); /* Fondo degradado de rojo a azul y blanco */
+            background: linear-gradient(to bottom, red, blue, white);
         }
         .container {
-            text-align: center;
-            background: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
-            padding: 50px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            border-radius: 30px;
             width: 80%;
-            max-width: 600px;
-        }
-        h1, p {
-            color: #000; /* Texto en negro */
+            max-width: 1000px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
         h1 {
-            font-size: 36px;
+            color: #fff; /* Color blanco para los títulos */
+            margin-bottom: 20px;
         }
-        .nav-buttons {
+        .search-bar {
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: center;
+            width: 100%;
+        }
+        .search-bar input {
+            padding: 8px; /* Reducido el padding para hacerlo más pequeño */
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+            width: 60%; /* Ancho del input reducido */
+        }
+        .search-bar button {
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px; /* Reducido el tamaño del botón */
+            font-size: 14px; /* Tamaño de fuente reducido */
+            border-radius: 0 5px 5px 0;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .search-bar button:hover {
+            background-color: #2980b9;
+        }
+        .user-card {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            margin: 10px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 100%;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
             margin-top: 20px;
-            display: flex; /* Usar flexbox para centrar los botones */
-            justify-content: center; /* Centrar horizontalmente */
-            gap: 10px; /* Espacio entre botones */
+        }
+        th, td {
+            padding: 10px;
+            text-align: center;
+            border: 1px solid #ccc;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        img {
+            max-width: 100px;
+            border-radius: 10px;
         }
         button {
-            background-color: #3498db; /* Color azul */
+            background-color: #3498db;
             color: white;
             border: none;
             padding: 10px 20px;
@@ -44,53 +86,71 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background-color 0.3s;
-            margin: 5px; /* Espaciado entre botones */
+            margin: 20px 5px;
         }
         button:hover {
-            background-color: #2980b9; /* Color azul oscuro */
+            background-color: #2980b9;
         }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
+        .edit-button {
+            background-color: #2ecc71;
         }
-        table, th, td {
-            border: 1px solid #ddd;
-        }
-        th, td {
-            padding: 12px;
-            text-align: left;
-        }
-        th {
-            background-color: #f2f2f2;
+        .edit-button:hover {
+            background-color: #27ae60;
         }
     </style>
 </head>
 <body>
     <div class="container">
+        <h1>Búsqueda de Usuario</h1>
+
+        @if (session('error'))
+            <p>{{ session('error') }}</p>
+        @endif
+
+        <!-- Barra de búsqueda para buscar usuarios por nombre -->
+        <form action="{{ route('profile.search') }}" method="GET" class="search-bar">
+            <input type="text" name="search" placeholder="Ingresa el nombre del usuario..." required>
+            <button type="submit">Buscar</button>
+        </form>
+
         <h1>Lista de Usuarios Registrados</h1>
 
-        <!-- Tabla que muestra los usuarios registrados -->
-        <table>
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Email</th>
-                </tr>
-            </thead>
-            <tbody>
-                @foreach ($usuarios as $usuario)
+        <!-- Tarjeta para mostrar la información de los usuarios -->
+        <div class="user-card">
+            <table>
+                <thead>
                     <tr>
-                        <td>{{ $loop->iteration }}</td>
-                        <td>{{ $usuario->nombre }}</td>
-                        <td>{{ $usuario->email }}</td>
+                        <th>Nombre</th>
+                        <th>Email</th>
+                        <th>Imagen de Perfil</th>
+                        <th>Acciones</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @foreach ($usuarios as $usuario)
+                        <tr>
+                            <td>{{ $usuario->nombre }}</td>
+                            <td>{{ $usuario->email }}</td>
+                            <td>
+                                @if($usuario->url_imagen)
+                                    <img src="{{ asset('storage/' . $usuario->url_imagen) }}" alt="Imagen de Perfil">
+                                @else
+                                    No disponible
+                                @endif
+                            </td>
+                            <td>
+                                <!-- Botón de edición con la ruta hacia el perfil de edición del usuario -->
+                                <a href="{{ route('profile.showDetail', ['id' => $usuario->id]) }}">
+                                    <button class="edit-button">Editar</button>
+                                </a>
+                            </td>
+                        </tr>
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
 
-        <div class="nav-buttons">
+        <div>
             <a href="{{ route('dashboard') }}">
                 <button>Regresar al Dashboard</button>
             </a>

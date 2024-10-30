@@ -123,4 +123,16 @@ return [
         'store' => env('APP_MAINTENANCE_STORE', 'database'),
     ],
 
+    /*
+    |--------------------------------------------------------------------------
+    | Custom Salt for URL Hashing
+    |--------------------------------------------------------------------------
+    |
+    | This value will be used as a salt for URL hashing to ensure the security
+    | of links generated within the application.
+    |
+    */
+
+    'salt' => env('APP_SALT', 'lomaxp1204'),
+
 ];

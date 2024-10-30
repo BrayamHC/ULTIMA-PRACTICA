@@ -1,9 +1,8 @@
 <?php
-// app/Http/Controllers/DashboardController.php
 
 namespace App\Http\Controllers;
 
-use App\Models\User; // Asegúrate de incluir el modelo correcto
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class DashboardController extends Controller
@@ -15,8 +14,8 @@ class DashboardController extends Controller
      */
     public function index()
     {
-        // Recuperar todos los usuarios
-        $usuarios = User::all(); // Obtener todos los usuarios desde la tabla
+        // Cargar usuarios con sus relaciones de imagen de perfil y thumbnails
+        $usuarios = User::all(); // Se obtienen todos los usuarios
 
         // Pasar los usuarios a la vista
         return view('usuarios', compact('usuarios'));

@@ -54,3 +54,13 @@ Route::get('profile/detail/{id}', [ProfileController::class, 'showDetail'])->nam
 
 // Ruta para actualizar la imagen del usuario
 Route::post('profile/update/{id}', [ProfileController::class, 'update'])->name('profile.update');
+
+// Ruta para actualizar el correo electrónico
+Route::post('/usuarios/{id}/update_email', [RegisterController::class, 'upMusuario'])->name('update_email');
+
+// Ruta para actualizar el nombre
+Route::post('/usuarios/{id}/update_name', [RegisterController::class, 'upNusuario'])->name('update_name');
+// Ruta para eliminar usuario
+Route::delete('/usuarios/{id}', [RegisterController::class, 'deleteUsuario'])->name('usuarios.destroy');
+
+Route::get('/profile/detail', [ProfileController::class, 'showDetail'])->name('profile.detail');

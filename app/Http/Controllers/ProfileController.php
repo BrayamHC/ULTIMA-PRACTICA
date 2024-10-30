@@ -15,25 +15,26 @@ class ProfileController extends Controller
         return view('profile');
     }
 
-    // Busca un usuario por el ID proporcionado y redirige a su perfil si es encontrado
+    // Busca un usuario por el nombre proporcionado y redirige a su perfil si es encontrado
     public function search(Request $request)
     {
         $query = $request->input('search'); // Obtiene el término de búsqueda
-        $user = User::find($query); // Busca el usuario por ID
 
+    // Busca el usuario por nombre utilizando LIKE para permitir coincidencias parciales
+        $user = User::where('nombre', 'LIKE', '%' . $query . '%')->first();
         if (!$user) {
-            // Si no se encuentra el usuario, redirige con un mensaje de error
-            return redirect()->route('profile.show')->with('error', 'Usuario no encontrado.');
+            // Si no se encuentra el usuario, regresa a la misma página con un mensaje de error
+            return redirect()->back()->with('error', 'Usuario no encontrado.');
         }
 
         // Redirige a la vista de detalles del usuario
         return redirect()->route('profile.showDetail', ['id' => $user->id]);
     }
 
-    // Muestra los detalles del usuario especificado por su ID
-    public function showDetail($id)
+    // Muestra los detalles del usuario especificado por su nombre
+    public function showDetail($nombre)
     {
-        $user = User::findOrFail($id); // Encuentra el usuario o lanza una excepción
+        $user = User::findOrFail($nombre); // Encuentra el usuario o lanza una excepción
         return view('profile_detail', compact('user')); // Retorna la vista de detalles con los datos del usuario
     }
 
@@ -42,7 +43,7 @@ class ProfileController extends Controller
     {
         // Valida que la imagen sea opcional, de tipo jpeg/png, y menor de 3 MB
         $request->validate([
-            'image' => 'nullable|image|mimes:jpeg,png|max:3072',
+            'image' => 'nullable|image|mimes:jpeg,png',
         ]);
 
         $user = User::findOrFail($id); // Obtiene el usuario o lanza una excepción
