@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Búsqueda de Usuario</title>
+    <title>ACCESO DENEGADO</title>
     <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
         body {
@@ -61,16 +61,13 @@
 </head>
 <body>
     <div class="container">
-        <h1>Búsqueda de Usuario</h1>
+        <h1>URL Inválida</h1>
 
         @if (session('error'))
             <p>{{ session('error') }}</p>
         @endif
 
-        <form action="{{ route('profile.search') }}" method="GET">
-            <input type="text" name="search" placeholder="Ingresa el ID del usuario..." required>
-            <button type="submit">Buscar</button>
-        </form>
+    
     </div>
 </body>
 </html>

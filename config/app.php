@@ -133,6 +133,5 @@ return [
     |
     */
 
-    'salt' => env('APP_SALT', 'lomaxp1204'),
 
 ];

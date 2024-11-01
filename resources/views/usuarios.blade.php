@@ -4,27 +4,33 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Usuarios</title>
-    <link rel="stylesheet" href="{{ asset('css/app.css') }}">
     <style>
         body {
             display: flex;
             justify-content: center;
-            align-items: flex-start;
-            flex-wrap: wrap;
-            height: auto;
+            align-items: center;
+            height: 100vh;
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, red, blue, white);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #2193b0; /* Degradado azul */
+            opacity: 0; /* Inicialmente oculto */
+            transition: opacity 0.5s ease; /* Transición de opacidad */
+        }
+        body.visible {
+            opacity: 1; /* Cuando se aplica la clase visible, muestra el contenido */
         }
         .container {
-            width: 80%;
-            max-width: 1000px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95); /* Fondo blanco semitransparente */
+            padding: 40px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra suave */
+            border-radius: 20px;
+            width: 90%;
+            max-width: 800px;
         }
         h1 {
-            color: #fff; /* Color blanco para los títulos */
+            color: #333;
+            font-size: 28px;
             margin-bottom: 20px;
         }
         .search-bar {
@@ -34,17 +40,17 @@
             width: 100%;
         }
         .search-bar input {
-            padding: 8px; /* Reducido el padding para hacerlo más pequeño */
+            padding: 10px;
             border: 1px solid #ccc;
             border-radius: 5px 0 0 5px;
-            width: 60%; /* Ancho del input reducido */
+            width: 70%;
         }
         .search-bar button {
             background-color: #3498db;
             color: white;
             border: none;
-            padding: 8px 15px; /* Reducido el tamaño del botón */
-            font-size: 14px; /* Tamaño de fuente reducido */
+            padding: 10px 15px;
+            font-size: 14px;
             border-radius: 0 5px 5px 0;
             cursor: pointer;
             transition: background-color 0.3s;
@@ -52,44 +58,48 @@
         .search-bar button:hover {
             background-color: #2980b9;
         }
-        .user-card {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            margin: 10px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            width: 100%;
-        }
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
         th, td {
-            padding: 10px;
+            padding: 12px;
             text-align: center;
-            border: 1px solid #ccc;
+            border: 1px solid #ddd;
         }
         th {
             background-color: #f2f2f2;
+            color: #555;
+        }
+        .user-card {
+            margin-top: 20px;
         }
         img {
-            max-width: 100px;
+            max-width: 80px;
             border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .nav-buttons {
+            margin-top: 20px;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
         }
         button {
             background-color: #3498db;
             color: white;
             border: none;
             padding: 10px 20px;
-            font-size: 16px;
+            font-size: 14px;
             border-radius: 5px;
             cursor: pointer;
-            transition: background-color 0.3s;
-            margin: 20px 5px;
+            transition: all 0.3s ease;
         }
         button:hover {
             background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .edit-button {
             background-color: #2ecc71;
@@ -115,7 +125,7 @@
 
         <h1>Lista de Usuarios Registrados</h1>
 
-        <!-- Tarjeta para mostrar la información de los usuarios -->
+        <!-- Tabla para mostrar la información de los usuarios -->
         <div class="user-card">
             <table>
                 <thead>
@@ -139,8 +149,7 @@
                                 @endif
                             </td>
                             <td>
-                                <!-- Botón de edición con la ruta hacia el perfil de edición del usuario -->
-                                <a href="{{ route('profile.showDetail', ['id' => $usuario->id]) }}">
+                                <a href="{{ route('profile.idhash', ['id' => $usuario->id]) }}?idsello={{ substr(hash('sha256', env('URL_SALT') . $usuario->id), 0, 8) }}">
                                     <button class="edit-button">Editar</button>
                                 </a>
                             </td>
@@ -150,11 +159,32 @@
             </table>
         </div>
 
-        <div>
+        <div class="nav-buttons">
             <a href="{{ route('dashboard') }}">
                 <button>Regresar al Dashboard</button>
             </a>
         </div>
     </div>
+
+    <script>
+        // Función para manejar el desvanecimiento al cargar la página
+        window.onload = function() {
+            document.body.classList.add('visible'); // Cambiar la clase para mostrar el contenido
+        };
+
+        const links = document.querySelectorAll('.nav-buttons a'); // Selecciona los enlaces en el contenedor de navegación
+
+        links.forEach(link => {
+            link.addEventListener('click', function (e) {
+                e.preventDefault(); // Prevenir el comportamiento por defecto del enlace
+                document.body.classList.remove('visible'); // Cambiar la clase para desvanecer
+
+                // Esperar a que la animación termine antes de redirigir
+                setTimeout(() => {
+                    window.location.href = this.href; // Redirigir a la nueva página
+                }, 500); // Tiempo que coincide con la duración de la animación
+            });
+        });
+    </script>
 </body>
 </html>

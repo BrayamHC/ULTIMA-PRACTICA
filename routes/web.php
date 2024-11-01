@@ -50,7 +50,7 @@ Route::get('profile', [ProfileController::class, 'show'])->name('profile.show');
 Route::get('profile/search', [ProfileController::class, 'search'])->name('profile.search');
 
 // Ruta para mostrar los detalles del usuario seleccionado
-Route::get('profile/detail/{id}', [ProfileController::class, 'showDetail'])->name('profile.showDetail');
+Route::get('profile/show/{id}', [ProfileController::class, 'showDetail'])->name('profile.showDetail');
 
 // Ruta para actualizar la imagen del usuario
 Route::post('profile/update/{id}', [ProfileController::class, 'update'])->name('profile.update');
@@ -63,4 +63,6 @@ Route::post('/usuarios/{id}/update_name', [RegisterController::class, 'upNusuari
 // Ruta para eliminar usuario
 Route::delete('/usuarios/{id}', [RegisterController::class, 'deleteUsuario'])->name('usuarios.destroy');
 
-Route::get('/profile/detail', [ProfileController::class, 'showDetail'])->name('profile.detail');
+// Ruta para mostrar los detalles del usuario seleccionado con ID y hash
+Route::get('profile/detail/{id}', [ProfileController::class, 'idhash'])->name('profile.idhash');
+

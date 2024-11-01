@@ -70,19 +70,30 @@ class RegisterController extends Controller
     }
 
     // Método para eliminar un usuario
-    public function deleteUsuario($id)
+    public function deleteUsuario(Request $request, $id)
     {
+        // Obtiene la variable de entorno URL_SALT del archivo .env
+        $urlSalt = env('URL_SALT');
+    
+        // Genera el hash para comparar
+        $hash = substr(hash('sha256', $urlSalt . $id), 0, 8);
+    
+        // Verifica que el hash enviado en la solicitud coincida
+        if ($request->query('hash') !== $hash) {
+            return redirect()->back()->with('error', 'Acceso no autorizado: el hash no coincide.');
+        }
+    
         // Encontrar al usuario por ID
         $user = User::find($id);
-
+    
         // Verifica si el usuario existe
         if (!$user) {
             return redirect()->back()->with('error', 'Usuario no encontrado.');
         }
-
+    
         // Elimina el usuario
         $user->delete();
-
+    
         // Redirige a la lista de usuarios con un mensaje de éxito
         return redirect()->route('usuarios')->with('success', 'Usuario eliminado con éxito.');
     }

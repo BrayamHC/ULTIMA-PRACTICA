@@ -7,26 +7,29 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
     <style>
-       body {
+        body {
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh; /* Altura completa de la ventana */
             margin: 0;
-            font-family: Arial, sans-serif;
-            background: linear-gradient(to bottom, red, blue, white); /* Fondo degradado de rojo a azul y blanco */
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; /* Tipografía moderna */
+            background: linear-gradient(45deg, #2193b0, #6dd5ed); /* Fondo degradado azul */
         }
         .container {
-            background-color: rgba(255, 255, 255, 0.9); /* Fondo blanco semitransparente */
+            background-color: rgba(255, 255, 255, 0.95); /* Fondo blanco semitransparente */
             padding: 40px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15); /* Sombra suave */
             border-radius: 20px;
             width: 80%;
             max-width: 500px; /* Tamaño máximo ajustado */
+            opacity: 0; /* Comienza oculto */
+            transform: translateY(20px); /* Comienza desplazado hacia abajo */
+            transition: opacity 0.5s ease, transform 0.5s ease; /* Transición suave */
         }
         h2 {
             text-align: center;
-            color: black;
+            color: #333; /* Color de texto más oscuro */
             margin-bottom: 20px;
         }
         .alert {
@@ -34,6 +37,8 @@
             margin-bottom: 20px;
             border-radius: 5px;
             text-align: center;
+        }
+        .alert-danger {
             background-color: #f8d7da; /* Color de fondo para errores */
             color: #721c24; /* Color del texto para errores */
         }
@@ -59,10 +64,13 @@
             color: white;
             cursor: pointer;
             font-size: 16px;
-            transition: background-color 0.3s; /* Transición para el efecto hover */
+            margin-bottom: 10px;
+            transition: all 0.3s ease; /* Transición para el efecto hover */
         }
         .btn:hover {
             background-color: #2980b9; /* Color del botón al pasar el mouse */
+            transform: translateY(-2px); /* Efecto de elevación */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra al hacer hover */
         }
         .link {
             text-align: center;
@@ -78,11 +86,11 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="register-container">
         <h2>Registro de Usuario</h2>
 
         @if ($errors->any())
-            <div class="alert">
+            <div class="alert alert-danger">
                 <ul>
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
@@ -116,5 +124,16 @@
             <p>¿Ya tienes una cuenta? <a href="{{ route('login') }}">Iniciar sesión</a></p>
         </div>
     </div>
+
+    <script>
+        // Espera a que el DOM esté completamente cargado
+        window.onload = function() {
+            // Selecciona el contenedor
+            var container = document.getElementById('register-container');
+            // Cambia la opacidad y la posición del contenedor
+            container.style.opacity = '1'; // Hacerlo visible
+            container.style.transform = 'translateY(0)'; // Volver a la posición original
+        };
+    </script>
 </body>
 </html>
